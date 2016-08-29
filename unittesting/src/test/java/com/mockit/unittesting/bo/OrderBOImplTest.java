@@ -180,10 +180,12 @@ public class OrderBOImplTest {
 	}
 	
 	/**
+	 * This is a positive test on deleteOrder
 	 * @throws SQLException 
 	 * @throws BOException 
 	 * 
 	 */
+	@Test
 	public void deleteOrder_success() throws SQLException, BOException{
 		//set expectations
 		when(dao.delete(ORDER_ID)).thenReturn(new Integer(1));
@@ -193,6 +195,41 @@ public class OrderBOImplTest {
 		
 		//assert result
 		assertTrue(result);
+		//verify if actual methods are actually being called on mock objects
+		verify(dao).delete(anyInt());
+	}
+	
+	/**
+	 * This is a negative test on deleteOrder
+	 * @throws SQLException
+	 * @throws BOException
+	 */
+	@Test
+	public void deleteOrder_failure() throws SQLException, BOException{
+		//set expectations
+		when(dao.delete(ORDER_ID)).thenReturn(new Integer(0));
+		
+		//call actual method
+		boolean result = bo.deleteOrder(ORDER_ID);
+		
+		//assert result
+		assertFalse(result);
+		//verify if actual methods are actually being called on mock objects
+		verify(dao).delete(anyInt());
+	}
+	/**
+	 * This testcase on exception scenario for deleteOrder
+	 * @throws SQLException
+	 * @throws BOException
+	 */
+	@Test(expected=BOException.class)
+	public void deleteOrder_shouldthrow_BOException() throws SQLException, BOException{
+		//set expectations
+		when(dao.delete(ORDER_ID)).thenThrow(SQLException.class);
+		
+		//call actual method
+		bo.deleteOrder(ORDER_ID);
+		
 		//verify if actual methods are actually being called on mock objects
 		verify(dao).delete(anyInt());
 	}
