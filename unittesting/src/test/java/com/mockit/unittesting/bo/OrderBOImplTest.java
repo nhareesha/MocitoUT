@@ -96,6 +96,29 @@ public class OrderBOImplTest {
 		verify(dao).createOrder(order);			
 	}
 	
+	/**
+	 * This is the positive test case for cancelOrder
+	 * @throws SQLException 
+	 * @throws BOException 
+	 */
+	@Test
+	public void cancelOrder_success() throws SQLException, BOException{
+		
+		//Set Expectations
+		when(dao.readOrder(123)).thenReturn(order);
+		when(dao.updateOrder(order)).thenReturn(new Integer(1));
+		//call actual method on class under test
+		boolean result = bo.cancelOrder(123); //123 is the test data under which behavior is set
+		
+		//Assert the result
+		assertTrue(result);
+		
+		//verify if mock methods are being called
+		verify(dao).readOrder(123);
+		verify(dao).updateOrder(order);
+		
+	}
+	
 	@After
 	public void tearDown() throws Exception {
 	}
