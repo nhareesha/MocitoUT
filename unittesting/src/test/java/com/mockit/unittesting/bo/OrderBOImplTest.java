@@ -7,11 +7,13 @@ import java.sql.SQLException;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertFalse;
 
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+
 import static org.mockito.Mockito.verify;
 
 import com.mockit.unittesting.Order;
@@ -58,7 +60,11 @@ public class OrderBOImplTest {
 		//5. Verify - verify if the methods on mock object are actually being called
 		verify(dao).createOrder(order);
 	}
-	
+	/**
+	 * This is negative test for placeOrder method
+	 * @throws SQLException
+	 * @throws BOException
+	 */
 	@Test
 	public void placeOrderTest_should_not_create_order() throws SQLException, BOException{
 		//Setup Expectations
@@ -72,6 +78,22 @@ public class OrderBOImplTest {
 		
 		//verify, if mock methods are being called
 		verify(dao).createOrder(order);		
+	}
+	/**
+	 * This test method is to test the exception scenario
+	 * @throws SQLException
+	 * @throws BOException
+	 */
+	@Test(expected=BOException.class)
+	public void placeOrderTest_should_throw_BOException() throws SQLException, BOException{
+		//Setup Expectations
+		when(dao.createOrder(order)).thenThrow(SQLException.class);
+		
+		//call the actual method
+		bo.placeOrder(order);
+		
+		//verify if method on mock obj is called
+		verify(dao).createOrder(order);			
 	}
 	
 	@After
