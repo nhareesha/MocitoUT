@@ -22,6 +22,8 @@ import static org.mockito.Matchers.anyObject;
 
 public class OrderBOImplTest {
 	
+	private static final int ORDER_ID = 123;
+
 	//1. step(a) - Stubbing
 	@Mock
 	OrderDAO dao;
@@ -37,7 +39,7 @@ public class OrderBOImplTest {
 											//for the current instance
 		//setting up pojo 
 		order = new Order();
-		order.setId(123);
+		order.setId(ORDER_ID);
 		order.setStatus("NEW");
 		
 		bo = new OrderBOImpl();
@@ -106,17 +108,17 @@ public class OrderBOImplTest {
 		
 		final String CANCEL = "CANCEL";
 		//Set Expectations
-		when(dao.readOrder(123)).thenReturn(order);
+		when(dao.readOrder(ORDER_ID)).thenReturn(order);
 		when(dao.updateOrder(order)).thenReturn(new Integer(1));
 		//call actual method on class under test
-		boolean result = bo.cancelOrder(123); //123 is the test data under which behavior is set
+		boolean result = bo.cancelOrder(ORDER_ID); //123 is the test data under which behavior is set
 		
 		//Assert the result
 		assertTrue(result);
 		assertEquals(CANCEL, order.getStatus());
 		
 		//verify if mock methods are being called
-		verify(dao).readOrder(123);
+		verify(dao).readOrder(ORDER_ID);
 		verify(dao).updateOrder(order);
 		
 	}
@@ -129,13 +131,13 @@ public class OrderBOImplTest {
 	public void cancelOrder_failure() throws SQLException, BOException{
 		
 		//Set Expectations
-		when(dao.readOrder(123)).thenReturn(order);
+		when(dao.readOrder(ORDER_ID)).thenReturn(order);
 		
 		//when(dao.readOrder(123)).thenReturn(null); //this is also a possible scenario
 		when(dao.updateOrder(order)).thenReturn(new Integer(0));
 		
 		//call actual method on class under test
-		boolean result = bo.cancelOrder(123); //123 is the test data under which behavior is set
+		boolean result = bo.cancelOrder(ORDER_ID); //123 is the test data under which behavior is set
 		
 		//Assert the result
 		assertFalse(result);
@@ -144,7 +146,20 @@ public class OrderBOImplTest {
 		verify(dao).readOrder(anyInt()); //we are just verifying the behavior so it doesn't matter what is the exact value
 		verify(dao).updateOrder(order);		
 	}
-	
+	/**
+	 * This methods the scenario where SQLException is thrown by read and resulting in BOExcetion
+	 * @throws SQLException
+	 * @throws BOException
+	 */
+	@Test(expected=BOException.class)
+	public void cancelOrder_should_throw_BOExceptionOnRead() throws SQLException, BOException{
+		//set expectations
+		when(dao.readOrder(anyInt())).thenThrow(SQLException.class);
+		//call aactual method
+		bo.cancelOrder(ORDER_ID);
+		//verify , id mock object methods are actually being called
+		verify(dao).readOrder(anyInt());
+	}
 	/**
 	 * This is the Exception testcase for cancelOrder
 	 * @throws SQLException
@@ -153,15 +168,33 @@ public class OrderBOImplTest {
 	@Test(expected=BOException.class)
 	public void cancelOrder_should_throw_BOException() throws SQLException, BOException{
 		//set expectations
-		when(dao.readOrder(123)).thenReturn(order);
+		when(dao.readOrder(ORDER_ID)).thenReturn(order);
 		when(dao.updateOrder(order)).thenThrow(SQLException.class);
 		
 		//call actual method
-		bo.cancelOrder(123);
+		bo.cancelOrder(ORDER_ID);
 		
 		//verify , id mock object methods are actually being called
 		verify(dao).readOrder(anyInt());
 		verify(dao).updateOrder((Order)anyObject());
+	}
+	
+	/**
+	 * @throws SQLException 
+	 * @throws BOException 
+	 * 
+	 */
+	public void deleteOrder_success() throws SQLException, BOException{
+		//set expectations
+		when(dao.delete(ORDER_ID)).thenReturn(new Integer(1));
+		
+		//call actual method
+		boolean result = bo.deleteOrder(ORDER_ID);
+		
+		//assert result
+		assertTrue(result);
+		//verify if actual methods are actually being called on mock objects
+		verify(dao).delete(anyInt());
 	}
 	/**
 	 * 
