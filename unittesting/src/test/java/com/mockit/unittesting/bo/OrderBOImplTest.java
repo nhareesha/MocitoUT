@@ -8,6 +8,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertFalse;
 
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -56,6 +57,21 @@ public class OrderBOImplTest {
 		
 		//5. Verify - verify if the methods on mock object are actually being called
 		verify(dao).createOrder(order);
+	}
+	
+	@Test
+	public void placeOrderTest_should_not_create_order() throws SQLException, BOException{
+		//Setup Expectations
+		when(dao.createOrder(order)).thenReturn(new Integer(0));
+		
+		//call actual method
+		boolean result = bo.placeOrder(order);
+		
+		//assert the result
+		assertFalse(result);
+		
+		//verify, if mock methods are being called
+		verify(dao).createOrder(order);		
 	}
 	
 	@After
