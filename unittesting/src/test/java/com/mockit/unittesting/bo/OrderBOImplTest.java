@@ -3,9 +3,11 @@ package com.mockit.unittesting.bo;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyInt;
+import static org.mockito.Matchers.anyObject;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.mockito.Matchers.anyInt;
 
 import java.sql.SQLException;
 
@@ -18,8 +20,6 @@ import org.mockito.MockitoAnnotations;
 import com.mockit.unittesting.Order;
 import com.mockit.unittesting.dao.OrderDAO;
 import com.mockit.unittesting.exceptions.BOException;
-import static org.mockito.Matchers.anyObject;
-
 public class OrderBOImplTest {
 	
 	private static final int ORDER_ID = 123;
@@ -51,7 +51,7 @@ public class OrderBOImplTest {
 	public void placeOrderTest_should_crateOrder_Successfully() throws SQLException, BOException {
 		
 		//2 . Step - Set Expectations for the mock methods that are being called by placedOrder method
-		when(dao.createOrder(order)).thenReturn(new Integer(1));
+		when(dao.createOrder(any(Order.class))).thenReturn(new Integer(1));
 		
 		//3. Actual method call
 		boolean result = bo.placeOrder(order);
@@ -89,7 +89,7 @@ public class OrderBOImplTest {
 	@Test(expected=BOException.class)
 	public void placeOrderTest_should_throw_BOException() throws SQLException, BOException{
 		//Setup Expectations
-		when(dao.createOrder(order)).thenThrow(SQLException.class);
+		when(dao.createOrder(any(Order.class))).thenThrow(SQLException.class);
 		
 		//call the actual method
 		bo.placeOrder(order);
