@@ -1,10 +1,9 @@
 package com.voidMethodStubbing;
 
+import static org.junit.Assert.assertSame;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyObject;
 
 import org.junit.After;
 import org.junit.Before;
@@ -30,7 +29,10 @@ public class TwoTest {
 		doNothing().when(one).fun();
 		
 		//call actual method
-		two.callVoidMethod();
+		int result = two.callVoidMethod();
+		
+		//assert values
+		assertSame(1, result);
 		
 		//verify if method is called
 		verify(one).fun();
