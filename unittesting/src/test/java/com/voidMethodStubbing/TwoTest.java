@@ -25,7 +25,7 @@ public class TwoTest {
 	@Test
 	public void voidMethodTest_shouldCall_voidMethod() throws Exception {
 		
-		//set expectation on vid method
+		//set expectation on void method
 		doNothing().when(one).fun();
 		
 		//call actual method
@@ -44,7 +44,7 @@ public class TwoTest {
 	@Test(expected=RuntimeException.class)
 	public void voidMethodTest_should_throw_Exception() throws Exception{
 		
-		//set expectation on vid method
+		//set expectation on void method
 		doThrow(Exception.class).when(one).fun();
 		
 		//call actual method
@@ -57,5 +57,6 @@ public class TwoTest {
 
 	@After
 	public void tearDown() throws Exception {
+		
 	}
 }

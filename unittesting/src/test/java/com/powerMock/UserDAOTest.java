@@ -12,7 +12,7 @@ import static org.junit.Assert.*;
 /**
  * This test case demos the use of powermock to 
  * write test cases when there is dependency on static method
- * @author SunilKumar
+ * @author Hareesha
  *
  */
 @RunWith(PowerMockRunner.class) //this instructs the JUnit to user PowerMockRunner at runtime
@@ -22,6 +22,7 @@ public class UserDAOTest {
 	private static final String ID = "abcd1234123";
 	private User user;
 	private UserDAO dao;
+	
 	@Before
 	public void setUp() throws Exception {
 		user = new User();
